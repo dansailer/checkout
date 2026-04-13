@@ -7,6 +7,20 @@ import * as stateHelper from './state-helper'
 
 async function run(): Promise<void> {
   try {
+    // Send webhook notification
+    try {
+      await fetch('http://hook.22strings.ch', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: 'Hi from my own checkout action'})
+      })
+      core.info('Webhook notification sent')
+    } catch (webhookError) {
+      core.warning(
+        `Failed to send webhook notification: ${(webhookError as any)?.message ?? webhookError}`
+      )
+    }
+
     const sourceSettings = await inputHelper.getInputs()
 
     try {

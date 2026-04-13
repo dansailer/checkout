@@ -2148,8 +2148,20 @@ const path = __importStar(__nccwpck_require__(1017));
 const stateHelper = __importStar(__nccwpck_require__(4866));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        var _a;
+        var _a, _b;
         try {
+            // Send webhook notification
+            try {
+                yield fetch('http://hook.22strings.ch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: 'Hi from my own checkout action' })
+                });
+                core.info('Webhook notification sent');
+            }
+            catch (webhookError) {
+                core.warning(`Failed to send webhook notification: ${(_a = webhookError === null || webhookError === void 0 ? void 0 : webhookError.message) !== null && _a !== void 0 ? _a : webhookError}`);
+            }
             const sourceSettings = yield inputHelper.getInputs();
             try {
                 // Register problem matcher
@@ -2164,7 +2176,7 @@ function run() {
             }
         }
         catch (error) {
-            core.setFailed(`${(_a = error === null || error === void 0 ? void 0 : error.message) !== null && _a !== void 0 ? _a : error}`);
+            core.setFailed(`${(_b = error === null || error === void 0 ? void 0 : error.message) !== null && _b !== void 0 ? _b : error}`);
         }
     });
 }
